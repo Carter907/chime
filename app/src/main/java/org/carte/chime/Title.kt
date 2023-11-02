@@ -16,9 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 @Composable
-fun Title(onScreenChange:(Screen) -> Unit) {
+fun Title(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -27,7 +28,7 @@ fun Title(onScreenChange:(Screen) -> Unit) {
         Text(fontSize = 80.sp, text = "Chess Timer")
         Spacer(modifier = Modifier.height(50.dp))
         Button(onClick = {
-            onScreenChange(Screen.CLOCK);
+            navController.navigate("clock")
         }) {
             Icon(Icons.Filled.PlayArrow, contentDescription = "play", modifier = Modifier.size(100.dp));
         }

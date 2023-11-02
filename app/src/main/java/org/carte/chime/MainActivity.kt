@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import org.carte.chime.ui.theme.ChessTimerTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,11 +24,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    var screen by remember { mutableStateOf(Screen.TITLE) }
+                    val navController = rememberNavController()
 
-                    screen.display(modifier = Modifier, onScreenChange =  {
-                        screen = it;
-                    });
+                    ChessTimer(navController);
+
                 }
             }
         }

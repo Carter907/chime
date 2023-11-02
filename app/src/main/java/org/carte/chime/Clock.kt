@@ -24,13 +24,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
+@Preview(showBackground = true)
 @Composable
 fun Player1Pad(modifier: Modifier = Modifier) {
-
 
     var player1Time by remember { mutableStateOf(0f) }
     Box(
@@ -40,6 +41,7 @@ fun Player1Pad(modifier: Modifier = Modifier) {
     }
 }
 
+@Preview(showBackground = true)
 @Composable
 fun Player2Pad(modifier: Modifier = Modifier) {
 
@@ -51,6 +53,7 @@ fun Player2Pad(modifier: Modifier = Modifier) {
     }
 }
 
+@Preview(showBackground = true)
 @Composable
 fun MiddleClockButtons(modifier: Modifier = Modifier) {
    Row(
@@ -64,12 +67,15 @@ fun MiddleClockButtons(modifier: Modifier = Modifier) {
            Icon(Icons.Rounded.Edit, "edit")
        }
 
+
+
    }
 }
 
 
+@Preview(showBackground = true)
 @Composable
-fun Clock(onScreenChange: (Screen) -> Unit, modifier: Modifier = Modifier) {
+fun Clock(modifier: Modifier = Modifier) {
 
     Column(
         modifier = Modifier
