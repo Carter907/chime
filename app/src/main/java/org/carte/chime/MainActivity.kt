@@ -11,9 +11,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.os.bundleOf
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import org.carte.chime.model.TimeControl
 import org.carte.chime.ui.theme.ChessTimerTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-
+                    var timeControlSelection by remember { mutableStateOf(TimeControl(0,0))}
 
                     NavHost(navController = navController, startDestination = "title") {
                         composable("title") {
@@ -41,11 +44,17 @@ class MainActivity : ComponentActivity() {
                         composable("clock") {
                             Clock(
                                 onResetPressed = {},
-                                onEditPressed = {navController.navigate("time-control")}
+                                onEditPressed = {navController.navigate("time-control")},
+                                timeControl = timeControlSelection
                             )
                         }
                         composable("time-control") {
-                            TimeControl {}
+                            TimeControlSelection(
+                                onSelectionPressed = {
+                                    timeControlSelection = it;
+                                    navController.navigate("clock")
+                                }
+                            )
                         }
                     }
                 }

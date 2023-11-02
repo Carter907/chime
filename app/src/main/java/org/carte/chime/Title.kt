@@ -29,7 +29,7 @@ fun Title(onContinuePressed: () -> Unit) {
     ) {
         Text(fontSize = 90.sp, text = "Chime")
         Text(fontSize = 20.sp, text = "Simple Chess Timer", modifier = Modifier.alpha(0.5f))
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(150.dp))
         Button(onClick = onContinuePressed) {
             Icon(Icons.Filled.PlayArrow, contentDescription = "play", modifier = Modifier.size(75.dp));
         }

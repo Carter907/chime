@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,54 +28,85 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
+import org.carte.chime.model.TimeControl
 
 
-@Preview(showBackground = true)
 @Composable
-fun Player1Pad(modifier: Modifier = Modifier) {
+fun Player1Pad(modifier: Modifier = Modifier, time: Double, increment: Int) {
 
-    var player1Time by remember { mutableStateOf(0f) }
     Box(
         modifier = modifier,
     ) {
-        Text(fontSize = 100.sp, text = "$player1Time", modifier = Modifier.align(Alignment.Center));
+        Text(
+            fontSize = 100.sp,
+            text = "%.2f".format(time),
+            modifier = Modifier.align(Alignment.Center)
+        );
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun Player2Pad(modifier: Modifier = Modifier) {
+fun Player2Pad(modifier: Modifier = Modifier, time: Double, increment: Int) {
 
-    var player2Time by remember { mutableStateOf(0f) }
     Box(
-        modifier = modifier
+        modifier = modifier,
     ) {
-        Text(fontSize = 100.sp, text = "$player2Time", modifier = Modifier.align(Alignment.Center));
+        Text(
+            fontSize = 100.sp,
+            text = "%.2f".format(time),
+            modifier = Modifier.align(Alignment.Center)
+        );
     }
 }
 
 @Composable
-fun MiddleClockButtons(modifier: Modifier = Modifier, onResetPressed: () -> Unit,
-                       onEditPressed: () -> Unit) {
-   Row(
-       modifier = Modifier.fillMaxWidth(),
-       horizontalArrangement = Arrangement.SpaceEvenly,
-   ) {
-       Button(onClick = onResetPressed) {
+fun MiddleClockButtons(
+    modifier: Modifier = Modifier, onResetPressed: () -> Unit,
+    onEditPressed: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+    ) {
+        Button(onClick = onResetPressed) {
             Icon(Icons.Rounded.Refresh, "reset")
-       }
-       Button(onClick = onEditPressed) {
-           Icon(Icons.Rounded.Edit, "edit")
-       }
+        }
+        Button(onClick = onEditPressed) {
+            Icon(Icons.Rounded.Edit, "edit")
+        }
 
 
-
-   }
+    }
 }
 
 
 @Composable
-fun Clock(modifier: Modifier = Modifier, onResetPressed: () -> Unit, onEditPressed: () -> Unit) {
+fun Clock(
+    modifier: Modifier = Modifier, onResetPressed: () -> Unit, onEditPressed: () -> Unit,
+    timeControl: TimeControl
+) {
+
+    var player1Time by remember { mutableStateOf(timeControl.time.toDouble()) }
+    var player2Time by remember { mutableStateOf(timeControl.time.toDouble()) }
+    var startGame by remember { mutableStateOf(false) }
+
+    var playerTurn by remember { mutableStateOf(false) }
+
+    if (startGame) {
+
+        LaunchedEffect(playerTurn) {
+            while (true) {
+                delay(1000);
+                if (playerTurn) {
+                    player1Time -= 0.01;
+                } else {
+                    player2Time -= 0.01;
+                }
+            }
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -83,18 +115,43 @@ fun Clock(modifier: Modifier = Modifier, onResetPressed: () -> Unit, onEditPress
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        Player1Pad(modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Gray, shape = ShapeDefaults.Large)
-            .weight(1f)
-            .clickable { });
+        Player1Pad(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Gray, shape = ShapeDefaults.Large)
+                .weight(1f)
+                .clickable {
+                    if (!startGame) {
+                        startGame = true;
+                        playerTurn = true;
+                    } else {
+                        playerTurn = false;
+                    }
+                },
+
+            time = player1Time,
+            increment = timeControl.increment
+
+        );
         MiddleClockButtons(onResetPressed = onResetPressed, onEditPressed = onEditPressed)
 
-        Player2Pad(modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Gray, shape = ShapeDefaults.Large)
-            .weight(1f)
-            .clickable { });
+        Player2Pad(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Gray, shape = ShapeDefaults.Large)
+                .weight(1f)
+                .clickable {
+                    if (!startGame) {
+                        startGame = true;
+                        playerTurn = false;
+                    } else {
+                        playerTurn = true;
+                    }
+                },
+
+            time = player2Time,
+            increment = timeControl.increment
+        );
 
     }
 }
