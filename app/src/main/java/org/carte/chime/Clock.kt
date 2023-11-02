@@ -53,17 +53,17 @@ fun Player2Pad(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun MiddleClockButtons(modifier: Modifier = Modifier) {
+fun MiddleClockButtons(modifier: Modifier = Modifier, onResetPressed: () -> Unit,
+                       onEditPressed: () -> Unit) {
    Row(
        modifier = Modifier.fillMaxWidth(),
        horizontalArrangement = Arrangement.SpaceEvenly,
    ) {
-       Button(onClick = {}) {
+       Button(onClick = onResetPressed) {
             Icon(Icons.Rounded.Refresh, "reset")
        }
-       Button(onClick = {}) {
+       Button(onClick = onEditPressed) {
            Icon(Icons.Rounded.Edit, "edit")
        }
 
@@ -73,9 +73,8 @@ fun MiddleClockButtons(modifier: Modifier = Modifier) {
 }
 
 
-@Preview(showBackground = true)
 @Composable
-fun Clock(modifier: Modifier = Modifier) {
+fun Clock(modifier: Modifier = Modifier, onResetPressed: () -> Unit, onEditPressed: () -> Unit) {
 
     Column(
         modifier = Modifier
@@ -89,7 +88,7 @@ fun Clock(modifier: Modifier = Modifier) {
             .background(Color.Gray, shape = ShapeDefaults.Large)
             .weight(1f)
             .clickable { });
-        MiddleClockButtons()
+        MiddleClockButtons(onResetPressed = onResetPressed, onEditPressed = onEditPressed)
 
         Player2Pad(modifier = Modifier
             .fillMaxWidth()
