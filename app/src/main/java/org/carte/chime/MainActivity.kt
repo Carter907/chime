@@ -11,6 +11,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.carte.chime.ui.theme.ChessTimerTheme
 
@@ -26,8 +28,26 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    ChessTimer(navController);
 
+                    NavHost(navController = navController, startDestination = "title") {
+                        composable("title") {
+                            Title(
+                                onContinuePressed = {
+                                    navController.navigate("time-control")
+                                }
+                            )
+                        }
+
+                        composable("clock") {
+                            Clock(
+                                onResetPressed = {},
+                                onEditPressed = {navController.navigate("time-control")}
+                            )
+                        }
+                        composable("time-control") {
+                            TimeControl {}
+                        }
+                    }
                 }
             }
         }
