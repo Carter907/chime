@@ -43,7 +43,6 @@ class MainActivity : ComponentActivity() {
 
                         composable("clock") {
                             Clock(
-                                onResetPressed = {},
                                 onEditPressed = {navController.navigate("time-control")},
                                 timeControl = timeControlSelection
                             )
