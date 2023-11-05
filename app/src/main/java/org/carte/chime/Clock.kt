@@ -1,5 +1,6 @@
 package org.carte.chime
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -90,10 +92,10 @@ fun MiddleClockButtons(
             }
 
         }
+
         Button(onClick = onEditPressed) {
             Icon(Icons.Rounded.Edit, "edit")
         }
-
 
 
     }
@@ -120,15 +122,19 @@ fun Clock(
             )
         )
     }
+    // timer will go if isPlaying is true and isPaused is false
     var isPlaying by remember { mutableStateOf(false) }
 
+    // boolean representing the player playing, if true, player1's timer is going, if false, player2's timer is going
     var playerTurn by remember { mutableStateOf(false) }
 
+    // isPaused is used for the pause button, need for the LaunchedEffect to operate.
     var isPaused by remember { mutableStateOf(false) }
 
     if (isPlaying && !isPaused) {
 
         LaunchedEffect(playerTurn) {
+
             while (true) {
                 delay(1);
                 if (playerTurn) {
@@ -138,6 +144,17 @@ fun Clock(
                 }
             }
         }
+    } else if (!isPlaying) {
+
+
+        player1Time =
+            TimeUnit.MINUTES.toMillis(
+                (timeControl.time).toLong()
+            )
+        player2Time =
+            TimeUnit.MINUTES.toMillis(
+                (timeControl.time).toLong()
+            )
     }
 
 
@@ -148,6 +165,9 @@ fun Clock(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
+
+        val context = LocalContext.current
+
         Player1Pad(
             modifier = Modifier
                 .fillMaxWidth()
@@ -156,8 +176,8 @@ fun Clock(
                 .clickable {
                     if (!isPlaying) {
                         isPlaying = true;
-                        playerTurn = true;
-                    } else {
+                        playerTurn = false;
+                    } else if (!isPaused) {
                         playerTurn = false;
                     }
                 },
@@ -167,11 +187,28 @@ fun Clock(
             increment = timeControl.increment
 
         );
+
         MiddleClockButtons(
-            onResetPressed = {},
+            onResetPressed = {
+
+                isPlaying = false;
+                isPaused = false;
+
+            },
             onEditPressed = onEditPressed,
             onPausePressed = {
-                isPaused = !isPaused;
+
+                if (!isPlaying) {
+                    Toast.makeText(context, "press pad to start opponent's timer", Toast.LENGTH_SHORT).show()
+                } else {
+
+                    isPaused = !isPaused;
+                }
+
+
+
+
+
             },
             isPaused = isPaused
 
@@ -185,8 +222,8 @@ fun Clock(
                 .clickable {
                     if (!isPlaying) {
                         isPlaying = true;
-                        playerTurn = false;
-                    } else {
+                        playerTurn = true;
+                    } else if (!isPaused) {
                         playerTurn = true;
                     }
                 },
