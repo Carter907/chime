@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ShapeDefaults
@@ -144,16 +145,34 @@ fun Clock(
     // isPaused is used for the pause button, need for the LaunchedEffect to operate.
     var isPaused by remember { mutableStateOf(false) }
 
+    var showWinner by remember { mutableStateOf(false) }
+
+    var winner by remember { mutableStateOf("black") }
+
+
+
+//    WinnerDialog(showDialog = showWinner, winner = winner) {
+//
+//        showWinner = false;
+//    }
+
+
     if (isPlaying && !isPaused) {
 
         LaunchedEffect(playerTurn) {
 
             while (true) {
-                delay(1);
+
+                if (player1Time <= 0 || player2Time <= 0) {
+                    showWinner = true;
+                    isPlaying = false;
+                    isPaused = false;
+                }
+                delay(100);
                 if (playerTurn) {
-                    player1Time -= 1;
+                    player1Time -= 100;
                 } else {
-                    player2Time -= 1;
+                    player2Time -= 100;
                 }
             }
         }
@@ -247,4 +266,26 @@ fun Clock(
         );
 
     }
+
+
+}
+
+@Composable
+fun WinnerDialog(showDialog: Boolean, onDismissRequest: () -> Unit, winner: String) {
+
+    if (showDialog) {
+        AlertDialog(onDismissRequest = onDismissRequest, confirmButton = {
+            Button(onClick = {
+                onDismissRequest()
+            }) {
+                Text("reset")
+            }
+        },
+            text = {
+                Text("$winner has won on time!")
+            }
+
+        )
+    }
+
 }
