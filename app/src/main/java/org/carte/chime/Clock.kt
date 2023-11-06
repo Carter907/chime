@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -124,16 +125,12 @@ fun Clock(
 
     var player1Time by remember {
         mutableStateOf(
-            TimeUnit.MINUTES.toMillis(
-                (timeControl.time).toLong()
-            )
+            timeControl.time * 60000
         )
     }
     var player2Time by remember {
         mutableStateOf(
-            TimeUnit.MINUTES.toMillis(
-                (timeControl.time).toLong()
-            )
+            timeControl.time * 60000
         )
     }
     // timer will go if isPlaying is true and isPaused is false
@@ -179,14 +176,9 @@ fun Clock(
     } else if (!isPlaying) {
 
 
-        player1Time =
-            TimeUnit.MINUTES.toMillis(
-                (timeControl.time).toLong()
-            )
-        player2Time =
-            TimeUnit.MINUTES.toMillis(
-                (timeControl.time).toLong()
-            )
+        player1Time = timeControl.time * 60000
+
+        player2Time = timeControl.time * 60000
     }
 
 
@@ -205,18 +197,20 @@ fun Clock(
                 .fillMaxWidth()
                 .background(Color.Gray, shape = ShapeDefaults.Large)
                 .weight(1f)
+                .rotate(180F)
                 .clickable {
                     if (!isPlaying) {
                         isPlaying = true;
                         playerTurn = false;
                     } else if (!isPaused) {
                         playerTurn = false;
+                        player1Time+=timeControl.increment * 1000;
                     }
                 },
 
-            minutes = player1Time / 60000,
-            seconds = (player1Time / 100) % 600,
-            increment = timeControl.increment
+            minutes = (player1Time / 60000).toLong(),
+            seconds = ((player1Time / 100) % 600).toLong(),
+            increment = timeControl.increment.toInt()
 
         );
 
@@ -257,12 +251,13 @@ fun Clock(
                         playerTurn = true;
                     } else if (!isPaused) {
                         playerTurn = true;
+                        player2Time+=(timeControl.increment * 1000).toLong()
                     }
                 },
 
-            minutes = player2Time / 60000,
-            seconds = (player2Time / 100) % 600,
-            increment = timeControl.increment
+            minutes = (player2Time / 60000).toLong(),
+            seconds = ((player2Time / 100) % 600).toLong(),
+            increment = timeControl.increment.toInt()
         );
 
     }

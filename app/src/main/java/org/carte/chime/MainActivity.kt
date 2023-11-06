@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    var timeControlSelection by remember { mutableStateOf(TimeControl(0,0))}
+                    var timeControlSelection by remember { mutableStateOf(TimeControl(0.0,0.0))}
 
                     NavHost(navController = navController, startDestination = "title") {
                         composable("title") {
