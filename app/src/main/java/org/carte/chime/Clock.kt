@@ -38,7 +38,12 @@ import java.util.concurrent.TimeUnit
 
 
 @Composable
-fun Player1Pad(modifier: Modifier = Modifier, minutes: Long, seconds: Long, increment: Int) {
+fun Player1Pad(
+    modifier: Modifier = Modifier,
+    minutes: Long,
+    seconds: Long,
+    increment: Int
+) {
 
     Box(
         modifier = modifier,
@@ -52,7 +57,12 @@ fun Player1Pad(modifier: Modifier = Modifier, minutes: Long, seconds: Long, incr
 }
 
 @Composable
-fun Player2Pad(modifier: Modifier = Modifier, minutes: Long, seconds: Long, increment: Int) {
+fun Player2Pad(
+    modifier: Modifier = Modifier,
+    minutes: Long,
+    seconds: Long,
+    increment: Int
+) {
 
     Box(
         modifier = modifier,
@@ -67,8 +77,10 @@ fun Player2Pad(modifier: Modifier = Modifier, minutes: Long, seconds: Long, incr
 
 @Composable
 fun MiddleClockButtons(
-    modifier: Modifier = Modifier, onResetPressed: () -> Unit,
-    onEditPressed: () -> Unit, onPausePressed: () -> Unit,
+    modifier: Modifier = Modifier,
+    onResetPressed: () -> Unit,
+    onEditPressed: () -> Unit,
+    onPausePressed: () -> Unit,
     isPaused: Boolean
 ) {
     Row(
@@ -104,7 +116,8 @@ fun MiddleClockButtons(
 
 @Composable
 fun Clock(
-    modifier: Modifier = Modifier, onEditPressed: () -> Unit,
+    modifier: Modifier = Modifier,
+    onEditPressed: () -> Unit,
     timeControl: TimeControl
 ) {
 
