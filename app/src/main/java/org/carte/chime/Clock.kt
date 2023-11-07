@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import org.carte.chime.model.Team
 import org.carte.chime.model.TimeControl
 import java.util.concurrent.TimeUnit
 
@@ -52,7 +53,7 @@ fun Player1Pad(
     ) {
         Text(
             fontSize = 100.sp,
-            text = "%d:%03d".format(minutes, seconds),
+            text = "%d:%02d.%01d".format(minutes, seconds / 10, seconds % 10),
             modifier = Modifier.align(Alignment.Center)
         );
     }
@@ -71,7 +72,7 @@ fun Player2Pad(
     ) {
         Text(
             fontSize = 100.sp,
-            text = "%d:%03d".format(minutes, seconds),
+            text = "%d:%02d.%01d".format(minutes, seconds / 10, seconds % 10),
             modifier = Modifier.align(Alignment.Center)
         );
     }
@@ -144,14 +145,24 @@ fun Clock(
 
     var showWinner by remember { mutableStateOf(false) }
 
-    var winner by remember { mutableStateOf("black") }
+    var winner by remember { mutableStateOf("") }
+
+    var player1Team by remember { mutableStateOf(Team.BLACK) };
+    var player2Team by remember { mutableStateOf(Team.WHITE) };
 
 
 
-//    WinnerDialog(showDialog = showWinner, winner = winner) {
-//
-//        showWinner = false;
-//    }
+    WinnerDialog(
+        showDialog = showWinner,
+        winner = winner,
+        onDismissRequest = { showWinner = false },
+        onConfirm = {
+            isPaused = false;
+            isPlaying = false;
+        }
+    )
+
+
 
 
     if (isPlaying && !isPaused) {
@@ -162,8 +173,11 @@ fun Clock(
 
                 if (player1Time <= 0 || player2Time <= 0) {
                     showWinner = true;
-                    isPlaying = false;
-                    isPaused = false;
+                    isPaused = true;
+                    winner = if (player1Time <= 0) {
+                        player2Team!!.name.lowercase()
+                    } else
+                        player1Team!!.name.lowercase()
                 }
                 delay(100);
                 if (playerTurn) {
@@ -202,9 +216,11 @@ fun Clock(
                     if (!isPlaying) {
                         isPlaying = true;
                         playerTurn = false;
+                        player1Team = Team.BLACK;
+                        player2Team = Team.WHITE;
                     } else if (!isPaused) {
                         playerTurn = false;
-                        player1Time+=timeControl.increment * 1000;
+                        player1Time += timeControl.increment * 1000;
                     }
                 },
 
@@ -225,15 +241,15 @@ fun Clock(
             onPausePressed = {
 
                 if (!isPlaying) {
-                    Toast.makeText(context, "press pad to start opponent's timer", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "press pad to start opponent's timer",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
 
                     isPaused = !isPaused;
                 }
-
-
-
-
 
             },
             isPaused = isPaused
@@ -249,9 +265,11 @@ fun Clock(
                     if (!isPlaying) {
                         isPlaying = true;
                         playerTurn = true;
+                        player2Team = Team.BLACK
+                        player1Team = Team.WHITE
                     } else if (!isPaused) {
                         playerTurn = true;
-                        player2Time+=(timeControl.increment * 1000).toLong()
+                        player2Time += (timeControl.increment * 1000).toLong()
                     }
                 },
 
@@ -266,12 +284,18 @@ fun Clock(
 }
 
 @Composable
-fun WinnerDialog(showDialog: Boolean, onDismissRequest: () -> Unit, winner: String) {
+fun WinnerDialog(
+    showDialog: Boolean,
+    onDismissRequest: () -> Unit,
+    winner: String,
+    onConfirm: () -> Unit
+) {
 
     if (showDialog) {
         AlertDialog(onDismissRequest = onDismissRequest, confirmButton = {
             Button(onClick = {
                 onDismissRequest()
+                onConfirm()
             }) {
                 Text("reset")
             }
