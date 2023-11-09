@@ -1,7 +1,19 @@
 package org.carte.chime
 
+import android.graphics.drawable.shapes.Shape
 import android.widget.Toast
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.EaseInOutQuad
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateValue
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +40,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +59,8 @@ fun Player1Pad(
     modifier: Modifier = Modifier,
     minutes: Long,
     seconds: Long,
-    increment: Int
+    increment: Int,
+    
 ) {
 
     Box(
@@ -161,7 +176,15 @@ fun Clock(
             isPlaying = false;
         }
     )
-
+    val infiniteTransition = rememberInfiniteTransition(label = "pad-select")
+    val padSelectionAnimation by infiniteTransition.animateColor(
+        initialValue = Color.Gray,
+        targetValue = Color.DarkGray,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = "pad-select"
+    )
 
 
 
@@ -175,9 +198,9 @@ fun Clock(
                     showWinner = true;
                     isPaused = true;
                     winner = if (player1Time <= 0) {
-                        player2Team!!.name.lowercase()
+                        player2Team.name.lowercase()
                     } else
-                        player1Team!!.name.lowercase()
+                        player1Team.name.lowercase()
                 }
                 delay(100);
                 if (playerTurn) {
@@ -200,6 +223,7 @@ fun Clock(
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp),
+
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -209,7 +233,7 @@ fun Clock(
         Player1Pad(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Gray, shape = ShapeDefaults.Large)
+                .background(color = if (playerTurn && isPlaying) { padSelectionAnimation } else { Color.Gray }, shape = ShapeDefaults.ExtraLarge)
                 .weight(1f)
                 .rotate(180F)
                 .clickable {
@@ -259,7 +283,7 @@ fun Clock(
         Player2Pad(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.Gray, shape = ShapeDefaults.Large)
+                .background(color = if (!playerTurn && isPlaying) { padSelectionAnimation } else { Color.Gray }, shape = ShapeDefaults.ExtraLarge)
                 .weight(1f)
                 .clickable {
                     if (!isPlaying) {
