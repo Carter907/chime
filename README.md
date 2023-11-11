@@ -27,10 +27,10 @@ _Time Controls Included_
 > Functionality on the timer screen adds userability and a pleasant experience.
 
 Pause Button
-: pauses the timers; you can press it again to resume
+:pauses the timers; you can press it again to resume
 
 Configure Button
-: takes you back to the time control screen; used to change the time control.
+:takes you back to the time control screen; used to change the time control.
 
 Reset Button
-: resets the timer with the previous specified time and increment.
+:resets the timer with the previous specified time and increment.
