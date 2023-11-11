@@ -22,15 +22,15 @@ _Time Controls Included_
   - 15 | 10
   - 30 min
 
-## Timer Related Functionality
+## Timer Related Functionality 🧰
 
 > Functionality on the timer screen adds userability and a pleasant experience.
 
-: Pause Button
-  pauses the timers; you can press it again to resume
+Pause Button
+: pauses the timers; you can press it again to resume
 
-: Configure Button
-  takes you back to the time control screen; used to change the time control.
+Configure Button
+: takes you back to the time control screen; used to change the time control.
 
-: Reset Button
-  resets the timer with the previous specified time and increment.
+Reset Button
+: resets the timer with the previous specified time and increment.
