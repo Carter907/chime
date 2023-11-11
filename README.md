@@ -3,7 +3,7 @@ Chess Clock made with Android Studio and Jetpack Compose
 
 ## Custom Time Control 🎨
 
-> One of the main reasons for creating this app was to have custom time control that is rare to come across in other similar applications.
+> One of the main reasons for creating this app was to have custom time control which is rare to come across in other similar applications.
 
 You can easily create your own custom time control per game using the custom time control button
 
@@ -21,3 +21,16 @@ _Time Controls Included_
   - 10 min
   - 15 | 10
   - 30 min
+
+## Timer Related Functionality
+
+> Functionality on the timer screen adds userability and a pleasant experience.
+
+: Pause Button
+  pauses the timers; you can press it again to resume
+
+: Configure Button
+  takes you back to the time control screen; used to change the time control.
+
+: Reset Button
+  resets the timer with the previous specified time and increment.
