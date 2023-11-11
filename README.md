@@ -25,12 +25,13 @@ _Time Controls Included_
 ## Timer Related Functionality 🧰
 
 > Functionality on the timer screen adds userability and a pleasant experience.
+<dl>
+<dt>Pause Button</dt>
+<dd>pauses the timers; you can press it again to resume</dd>
 
-Pause Button
-:pauses the timers; you can press it again to resume
+<dt>Configure Button</dt>
+<dd>takes you back to the time control screen; used to change the time control.</dd>
 
-Configure Button
-:takes you back to the time control screen; used to change the time control.
-
-Reset Button
-:resets the timer with the previous specified time and increment.
+<dt>Reset Button</dt>
+<dd>resets the timer with the previous specified time and increment.</dd>
+</dl>
